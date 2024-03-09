@@ -34,7 +34,7 @@ namespace Microscope.CodeLensProvider {
         public async Task Connect() {
             await stream.ConnectAsync().Caf();
             rpc = JsonRpc.Attach(stream, this);
-            await rpc.InvokeAsync(nameof(IRemoteVisualStudio.RegisterCodeLensDataPoint), owner.id).Caf();
+            await rpc.InvokeAsync(nameof(IRemoteVisualStudio.RegisterCodeLensDataPoint), owner._datapointId).Caf();
         }
 
         public void Refresh() => owner.Refresh();

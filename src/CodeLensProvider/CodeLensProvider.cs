@@ -37,7 +37,7 @@ namespace Microscope.CodeLensProvider {
             CancellationToken ct)
             => (descriptor.Kind is CodeElementKinds.Method || descriptor.Kind is CodeElementKinds.Property)
             && await callbackService.Value
-                .InvokeAsync<bool>(this, nameof(IInstructionsProvider.IsMicroscopeEnabled)).Caf();
+                .InvokeAsync<bool>(this, nameof(IQueryRunner.IsExtensionEnabled)).Caf();
 
         public async Task<IAsyncCodeLensDataPoint> CreateDataPointAsync(
             CodeLensDescriptor descriptor,
@@ -47,7 +47,7 @@ namespace Microscope.CodeLensProvider {
                 var dp = new CodeLensDataPoint(callbackService.Value, descriptor);
 
                 var vspid = await callbackService.Value
-                    .InvokeAsync<int>(this, nameof(IInstructionsProvider.GetVisualStudioPid)).Caf();
+                    .InvokeAsync<int>(this, nameof(IQueryRunner.GetVisualStudioPid)).Caf();
                 await dp.ConnectToVisualStudio(vspid).Caf();
 
                 return dp;

@@ -1,38 +1,29 @@
 ﻿#nullable enable
 
 namespace Microscope.CodeAnalysis.Model {
+    using Microscope.Shared;
+    using System.Linq;
+
     using System.Collections.Generic;
+    using System.Collections.Immutable;
 
-    public readonly struct DetailsData {
-        public IReadOnlyList<InstructionData>? MethodInstructions { get; }
-
-        public IReadOnlyList<GeneratedMethod>? PropertyAccessors { get; }
-
-        public IReadOnlyList<GeneratedType> CompilerGeneratedTypes { get; }
-
-        public bool HasCompilerGeneratedTypes => CompilerGeneratedTypes.Count > 0;
-
-        public bool IsMethod => MethodInstructions != null;
-
-        public bool IsProperty => PropertyAccessors != null;
-
-        public DetailsData(
-            IReadOnlyList<InstructionData>? methodInstructions,
-            IReadOnlyList<GeneratedMethod>? propertyAccessors,
-            IReadOnlyList<GeneratedType> compilerGeneratedTypes) {
-            MethodInstructions = methodInstructions;
-            PropertyAccessors = propertyAccessors;
-            CompilerGeneratedTypes = compilerGeneratedTypes;
+    public struct TableRow {
+        public TableRow(string responseCode, string count) {
+            ResponseCode = responseCode;
+            Count = count;
         }
 
-        public static DetailsData ForMethod(
-            IReadOnlyList<InstructionData> methodInstructions,
-            IReadOnlyList<GeneratedType> compilerGeneratedTypes)
-            => new DetailsData(methodInstructions, propertyAccessors: null, compilerGeneratedTypes);
+        public string ResponseCode { get; }
+        public string Count { get; }
+    }
+    //questo definisce il pannello con griglia dei dettagli
+    public readonly struct DetailsData {
+        public IReadOnlyList<TableRow>? TableRows { get; }
 
-        public static DetailsData ForProperty(
-            IReadOnlyList<GeneratedMethod> propertyAccessors,
-            IReadOnlyList<GeneratedType> compilerGeneratedTypes)
-            => new DetailsData(methodInstructions: null, propertyAccessors, compilerGeneratedTypes);
+        public DetailsData(CodeLensDetails tableRows) 
+            => TableRows = (IReadOnlyList<TableRow>?)tableRows
+                             .CodeLensDetailsData.Rows
+                             .Select(x => new TableRow($"{x[0]}",
+                                                       $"{x[1]}")).ToImmutableList();
     }
 }

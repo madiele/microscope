@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using System.Collections.Concurrent;
+
 namespace Microscope.VSExtension {
     using System;
     using System.Diagnostics;
@@ -10,15 +12,12 @@ namespace Microscope.VSExtension {
     using Microscope.CodeAnalysis.Model;
     using Microscope.Shared;
 
-    using Mono.Cecil.Cil;
-    using Mono.Collections.Generic;
-
     using StreamJsonRpc;
 
     using static Microscope.Shared.Logging;
 
-    using CodeLensConnections = System.Collections.Concurrent.ConcurrentDictionary<System.Guid, CodeLensConnectionHandler>;
-    using CodeLensDetails = System.Collections.Concurrent.ConcurrentDictionary<System.Guid, CodeAnalysis.Model.DetailsData>;
+    using CodeLensConnections = ConcurrentDictionary<System.Guid, CodeLensConnectionHandler>;
+    using CodeLensDetails = ConcurrentDictionary<System.Guid, CodeAnalysis.Model.DetailsData>;
 
     public class CodeLensConnectionHandler : IRemoteVisualStudio, IDisposable {
         private static readonly CodeLensConnections connections = new CodeLensConnections();
@@ -70,8 +69,6 @@ namespace Microscope.VSExtension {
             dataPointId = id;
             connections[id] = this;
         }
-
-        public static void StoreDetailsData(Guid id, DetailsData details) => detailsData[id] = details;
 
         public static DetailsData GetDetailsData(Guid id) => detailsData[id];
 

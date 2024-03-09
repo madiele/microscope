@@ -67,7 +67,7 @@
     <Compile Include="Options\DialogPageProvider.cs" />
     <Compile Include="Options\GeneralOptions.cs" />
     <Compile Include="RefreshCommand.cs" />
-    <Compile Include="InstructionsProvider.cs" />
+    <Compile Include="QueryRunner.cs" />
     <Compile Include="MicroscopePackage.cs" />
     <Compile Include="MicroscopeCommands.cs">
       <AutoGen>True</AutoGen>
